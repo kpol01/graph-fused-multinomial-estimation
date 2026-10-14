@@ -1,0 +1,220 @@
+---
+title: "Problem 2"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  fig.width = 9,
+  fig.height = 6
+)
+```
+
+## Problem 2
+
+We simulate the three autoregressive series using the given code.
+
+```{r simulation}
+set.seed(4155)
+
+n <- 400
+
+x1 <- arima.sim(model = list(ar = 0.75), n = n)
+x2 <- arima.sim(model = list(ar = -0.75), n = n)
+x3 <- arima.sim(model = list(ar = c(1.2, -0.5)), n = n)
+```
+
+## (a) Time series plots
+
+```{r time-series-plots, fig.height=8}
+par(mfrow = c(3, 1), mar = c(3, 4, 2, 1))
+
+plot(x1, type = "l",
+     main = "Series 1: AR(1), phi = 0.75",
+     xlab = "Time", ylab = expression(X[t]))
+
+plot(x2, type = "l",
+     main = "Series 2: AR(1), phi = -0.75",
+     xlab = "Time", ylab = expression(X[t]))
+
+plot(x3, type = "l",
+     main = "Series 3: AR(2), phi1 = 1.2, phi2 = -0.5",
+     xlab = "Time", ylab = expression(X[t]))
+
+par(mfrow = c(1, 1))
+```
+
+For the first series, the positive AR coefficient $\phi=0.75$ produces
+strong positive persistence. Consecutive observations tend to have similar
+signs and values, so the series contains relatively long runs above or below
+its mean.
+
+For the second series, the negative coefficient $\phi=-0.75$ causes
+successive observations to tend to have opposite signs. Therefore, the
+series exhibits a noticeable alternating or zig-zag pattern.
+
+The third series is an AR(2) process. The combination of coefficients
+$\phi_1=1.2$ and $\phi_2=-0.5$ produces oscillatory behavior. Unlike Series 2,
+which tends to alternate at every observation, Series 3 tends to exhibit
+smoother waves or cycles that gradually change over time.
+
+## (b) Sample ACF
+
+We compute the sample autocorrelation functions through lag 24.
+
+```{r acf-plots, fig.height=8}
+par(mfrow = c(3, 1), mar = c(4, 4, 2, 1))
+
+acf(x1, lag.max = 24,
+    main = "ACF: Series 1")
+
+acf(x2, lag.max = 24,
+    main = "ACF: Series 2")
+
+acf(x3, lag.max = 24,
+    main = "ACF: Series 3")
+
+par(mfrow = c(1, 1))
+```
+
+For Series 1, the ACF decreases approximately smoothly and geometrically
+toward zero. For a theoretical AR(1) model with $\phi=0.75$,
+
+\[
+\rho(h) = (0.75)^{|h|},
+\]
+
+so the autocorrelations are positive and decay as the lag increases.
+
+For Series 2,
+
+\[
+\rho(h) = (-0.75)^{|h|}.
+\]
+
+Thus, the ACF alternates in sign. The correlations are negative at odd lags
+and positive at even lags, while their magnitudes gradually decrease toward
+zero.
+
+Series 3 has a damped oscillatory ACF. Its autocorrelations alternate in a
+more gradual wave-like fashion rather than simply changing sign at every lag.
+This behavior is characteristic of an AR(2) process having complex
+characteristic roots.
+
+## (c) Why does the ACF of an AR process tail off?
+
+For an AR process, the current observation depends on previous observations,
+which in turn depend on even earlier observations. Therefore, dependence is
+transmitted indirectly across many lags.
+
+For example, for an AR(1) process
+
+\[
+X_t = \phi X_{t-1} + W_t,
+\]
+
+the theoretical ACF is
+
+\[
+\rho(h) = \phi^{|h|}.
+\]
+
+When $|\phi|<1$, this quantity approaches zero as $h$ increases, but it is
+not exactly zero at any fixed lag. Thus, the ACF of an AR process generally
+\textit{tails off} rather than cutting off abruptly.
+
+This contrasts with a moving-average process, for which the theoretical ACF
+becomes exactly zero after the order of the MA process.
+
+Therefore, based only on the ACF plots, identifying the exact order of an AR
+model can be difficult. Several AR models can produce ACFs that decay in
+similar ways. The PACF is generally more useful for determining the order of
+an AR process because the theoretical PACF of an AR($p$) process cuts off
+after lag $p$.
+
+## (d) Sample PACF
+
+```{r pacf-plots, fig.height=8}
+par(mfrow = c(3, 1), mar = c(4, 4, 2, 1))
+
+pacf(x1, lag.max = 24,
+     main = "PACF: Series 1")
+
+pacf(x2, lag.max = 24,
+     main = "PACF: Series 2")
+
+pacf(x3, lag.max = 24,
+     main = "PACF: Series 3")
+
+par(mfrow = c(1, 1))
+```
+
+For Series 1, there is a prominent positive spike at lag 1. After lag 1,
+the remaining sample partial autocorrelations are generally small and mostly
+within the confidence bounds. Thus, the PACF appears to cut off after lag 1.
+
+For Series 2, there is a prominent negative spike at lag 1. The remaining
+partial autocorrelations are generally small. Thus, its PACF also appears to
+cut off after lag 1.
+
+For Series 3, prominent partial autocorrelations occur at lags 1 and 2.
+After lag 2, the remaining values are generally much smaller and fluctuate
+around zero. Therefore, its PACF appears to cut off after lag 2.
+
+These patterns agree with the theoretical property that the PACF of an
+AR($p$) process is zero for lags greater than $p$.
+
+## (e) Estimating the AR orders
+
+From the PACF plots, the estimated orders are
+
+\[
+\begin{array}{c|c}
+\text{Series} & \text{Estimated AR order} \\
+\hline
+x_1 & 1 \\
+x_2 & 1 \\
+x_3 & 2
+\end{array}
+\]
+
+Thus, we identify
+
+\[
+x_1 \sim AR(1), \qquad
+x_2 \sim AR(1), \qquad
+x_3 \sim AR(2).
+\]
+
+An isolated significant PACF spike at a later lag does not necessarily mean
+that the process has a higher AR order. Sample autocorrelations and partial
+autocorrelations are random quantities. Even when the true population PACF
+is zero at a particular lag, sampling variability can cause the estimated
+PACF to exceed the approximate significance limits.
+
+The commonly displayed approximate 95\% confidence limits are
+
+\[
+\pm \frac{1.96}{\sqrt{n}}.
+\]
+
+For $n=400$, these limits are approximately
+
+```{r confidence-limit}
+1.96 / sqrt(n)
+```
+
+or about
+
+\[
+\pm 0.098.
+\]
+
+Because many lags are being inspected simultaneously, it is possible for
+one or more later lags to cross these bounds simply by chance. Therefore,
+AR order should primarily be determined from the systematic pattern of the
+early PACF lags rather than from a single isolated significant spike at a
+large lag.

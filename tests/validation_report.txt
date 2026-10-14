@@ -1,0 +1,53 @@
+PASS: stable probabilities for extreme logits 
+PASS: rook and king graph topology, including one-dimensional grids 
+PASS: incidence operator and guaranteed norm bound 
+PASS: kNN self exclusion, complete graphs, and component-size bound 
+PASS: SBM isolation repair respects two-vertex blocks 
+PASS: truth generators and simulated multinomial totals 
+PASS: two-node binary solver agrees with analytic penalized solutions 
+PASS: edgeless and zero-count fits 
+PASS: seeded count splitting preserves counts and the caller's RNG 
+PASS: CV scores match independent closed-form multinomial MLE scores 
+PASS: CV ignores empty validation folds and rejects unusable splits 
+PASS: clear invalid-input errors and convergence diagnostics 
+PASS: portable loading into a specified environment without attaching packages 
+
+All 13 validation groups passed.
+R version 4.3.3 (2024-02-29) 
+Matrix 1.6.5 
+igraph 1.6.0 
+FNN 1.1.4 
+PASS: standalone sourcing and public interface compatibility 
+PASS: Chicago splits retain exact assignments, integer counts, and cell rules 
+PASS: India splits retain exact assignments and preserve zero-total rows 
+PASS: both splitters preserve the caller's RNG state 
+PASS: rook adjacency preserves isolated cells and excludes diagonals 
+PASS: queen graph, incidence, components, and Laplacian 
+PASS: C-16 code padding, hierarchy, and population reconciliation 
+PASS: India preparation from real workbook-format and shapefile fixtures 
+PASS: largest-component selection keeps splits and a stable exclusion audit 
+PASS: probability alignment and independently calculated test scores 
+PASS: Chicago preparation and exclusions from a cached spatial fixture 
+PASS: ID pagination and API schema checking with a mocked fetcher 
+PASS: local transfer helpers, empty-file recovery, and timeout restoration 
+PASS: map panels, probability scale, and row-order checks 
+PASS: invalid arguments and malformed snapshots fail before preparation 
+
+All 15 validation groups passed.
+R version 4.3.3 (2024-02-29) 
+sf 1.0.15 
+Matrix 1.6.5 
+igraph 1.6.0 
+readxl 1.4.3 
+ggplot2 3.4.4 
+PASS: all active R files parse 
+PASS: entry scripts only define functions when sourced from another directory 
+PASS: raw proportions preserve zero-total rows rather than inventing values 
+PASS: scores agree with individual outcomes and correctly exclude empty nodes 
+PASS: MCAR fitted-count conversion and isolated-node rejection 
+PASS: summary means, axes, and stored uncertainty are unchanged 
+PASS: supplied Chicago cache, CSVs, graph, and holdout are aligned 
+
+All 7 project validation groups passed.
+
+All validation suites passed.
